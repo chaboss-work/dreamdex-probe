@@ -1,0 +1,21 @@
+{
+  "name": "dreamdex-probe",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Consistency probes for dreamDEX perps on the Somnia Hideki testnet, built on @somnia-chain/markets-sdk",
+  "license": "MIT",
+  "scripts": {
+    "probe": "tsx src/probe.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@somnia-chain/markets-sdk": "^0.32.1",
+    "viem": "^2.57.17"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.3"
+  }
+}
