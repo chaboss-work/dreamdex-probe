@@ -23,6 +23,11 @@ Checks per run:
 
 No private key is needed and no transaction is sent.
 
+### HTTP API and WebSocket checks
+
+`src/ws-probe.ts` (`npm run ws-probe`) replays the documented WebSocket behaviour against the public testnet feed `wss://stg.api.dreamdex.io/v0/ws/public`: heartbeat, REST-over-WebSocket operations, protocol errors, every subscription error and the order-channel id formats. It writes `out/ws-probe.json`.
+The HTTP API checks are plain `curl` calls against `https://stg.api.dreamdex.io/v0`; each feedback file lists the exact commands and responses.
+
 ## Run
 
 ```bash
@@ -46,6 +51,14 @@ Confirmed findings are written up one per file in [`feedback/`](feedback/), in t
 | 03 | docs | SDK `PERPS.md` says only BTC and ETH perps are live |
 | 04 | SDK | `hidekiTestnet` has no `blockExplorers`, though the docs list one |
 | 05 | docs | one network, three names: Somnia Tokyo / Hideki / DreamDEX region |
+| 06 | docs | HTTP API: "unknown symbols are silently skipped", but the API answers 400 `invalid_param` |
+| 07 | API | unknown routes return plain-text `404 page not found`, not the documented JSON error |
+| 08 | API | `/volume` accepts seconds and negative timestamps and silently returns zero volume |
+| 09 | docs | WebSocket `order` channel rejects both documented orderId formats (hex, ULID); only decimal works — **major** |
+| 10 | API | WebSocket op with a missing path parameter returns `market_not_found`, not `invalid_parameters` |
+| 11 | API | REST and WebSocket trades use different ids and fields, so they cannot be reconciled |
+| 12 | docs | CCXT page uses `SOMI/USDC`; the adapter exposes `SOMI/USDso`, has no testnet, and its spec links 404 |
+| 13 | docs | HTTP and WebSocket APIs list no perps at all (3 spot markets on testnet) |
 
 What matched: system contract addresses (`getPerpSystemConfig`), base decimals of all 21 documented symbols, quote decimals (18) and quote token (USDso) of every market, and `tickSize` / `minQuantity` / `lotSize` between the indexer and the pools.
 
